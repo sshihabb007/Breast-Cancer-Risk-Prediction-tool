@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cancer Risk Assessment Tool</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90' fill='%233B82F6' font-family='sans-serif' font-weight='bold'>C</text></svg>">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0B1120',
+                        darkCard: '#151D2E',
+                        darkInput: '#1E293B',
+                        darkBorder: '#334155',
+                        brandBlue: '#3B82F6',
+                        brandCyan: '#06B6D4',
+                        accentYellow: '#EAB308',
+                        accentYellowHover: '#CA8A04'
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-[#f0f4f8] text-slate-800 dark:bg-darkBg dark:text-slate-200 min-h-screen flex flex-col items-center transition-colors duration-300 select-none">
+
+    <!-- Header Section (Inspired by provided UI) -->
+    <header class="w-full bg-gradient-to-r from-indigo-600 via-brandBlue to-brandCyan dark:from-indigo-900 dark:via-blue-900 dark:to-cyan-900 pt-16 pb-12 px-4 relative flex flex-col items-center justify-center text-center shadow-lg header-pattern">
+        
+        <!-- Theme Toggle Button -->
+        <button id="theme-toggle-shihab" class="absolute top-6 right-6 flex items-center justify-center w-11 h-11 bg-white/20 hover:bg-white/30 dark:bg-black/20 dark:hover:bg-black/40 backdrop-blur-sm border border-white/20 text-white rounded-full transition-all focus:outline-none focus:ring-2 focus:ring-white/50" aria-label="Toggle Dark Mode">
+            <!-- Sun Icon (for dark mode) -->
+            <svg id="theme-toggle-light-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" fill-rule="evenodd" clip-rule="evenodd"></path></svg>
+            <!-- Moon Icon (for light mode) -->
+            <svg id="theme-toggle-dark-icon" class="hidden w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path></svg>
+        </button>
+
+        <h1 class="text-3xl sm:text-5xl font-extrabold text-white mb-4 tracking-tight drop-shadow-md">Cancer Risk Assessment Tool</h1>
+        <p class="text-indigo-100 max-w-2xl text-lg sm:text-xl drop-shadow-sm font-medium">Evaluate your predicted risk level based on the clinical model.</p>
+        
+        <div class="mt-6 flex flex-wrap justify-center gap-4">
+            <span class="inline-flex items-center gap-2 bg-white text-indigo-800 px-5 py-2 rounded-full font-bold shadow-md cursor-default text-sm">
+                20 Attributes
+            </span>
+            <span class="inline-flex items-center gap-2 bg-transparent border border-white/40 text-white px-5 py-2 rounded-full font-semibold hover:bg-white/10 transition-colors cursor-default text-sm backdrop-blur-sm">
+                Clinical Formula
+            </span>
+        </div>
+    </header>
+
+    <!-- Yellow Accent Banner -->
+    <div class="w-full flex justify-center -mt-5 relative z-10 mb-10">
+        <div class="bg-accentYellow hover:bg-accentYellowHover text-yellow-950 px-6 py-2.5 rounded-lg font-extrabold text-sm shadow-lg flex items-center gap-2 border border-yellow-400 transition-colors cursor-default">
+            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"></path></svg>
+            Complete all fields accurately
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="max-w-6xl w-full px-4 sm:px-6 pb-16">
+        <form id="risk-form-mehedi" class="space-y-8">
+            
+            <!-- Group 1: Demographics & Medical Profile -->
+            <fieldset class="border border-slate-200 dark:border-darkBorder rounded-2xl p-6 sm:p-8 bg-[#F8FAFC] dark:bg-darkCard shadow-sm hover:shadow-md dark:shadow-none transition duration-300">
+                <legend class="text-sm font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400 px-4 py-1.5 bg-indigo-50 dark:bg-indigo-900/40 border border-indigo-200 dark:border-indigo-800 rounded-lg shadow-sm">Group 1: Demographics & Medical Profile</legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <div class="group">
+                        <label for="age" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">Age</label>
+                        <select id="age" name="age" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select age range</option>
+                            <option value="1">≤ 24</option>
+                            <option value="2">25-38</option>
+                            <option value="3">39-50</option>
+                            <option value="4">> 50</option>
+                        </select>
+                    </div>
+                    
+                    <div class="group">
+                        <label for="family_history" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">Affected Family Members</label>
+                        <select id="family_history" name="family_history" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select family history</option>
+                            <option value="1">None</option>
+                            <option value="2">Uncle or Aunty</option>
+                            <option value="5">Mother/Father/Brother/Sister</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="previous_cancer" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">Affected Any Cancer Before</label>
+                        <select id="previous_cancer" name="previous_cancer" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select previous cancer</option>
+                            <option value="1">No</option>
+                            <option value="4">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="early_menarche" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">Early Menarche (< 12 years)</label>
+                        <select id="early_menarche" name="early_menarche" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select early menarche</option>
+                            <option value="1">No</option>
+                            <option value="4">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="alcohol" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">Alcohol Use</label>
+                        <select id="alcohol" name="alcohol" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select alcohol use</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="bmi" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">BMI</label>
+                        <select id="bmi" name="bmi" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select BMI</option>
+                            <option value="1">≤ 24</option>
+                            <option value="2">25-28</option>
+                            <option value="3">> 28</option>
+                        </select>
+                    </div>
+
+                    <div class="group lg:col-span-3">
+                        <label for="hormone_therapy" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-indigo-500 dark:group-hover:text-indigo-300 transition-colors">Hormone Therapy in Breast Area</label>
+                        <select id="hormone_therapy" name="hormone_therapy" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium lg:w-1/3" required>
+                            <option value="" disabled selected>Select hormone therapy</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Group 2: Maternity & Marital History -->
+            <fieldset class="border border-slate-200 dark:border-darkBorder rounded-2xl p-6 sm:p-8 bg-[#F8FAFC] dark:bg-darkCard shadow-sm hover:shadow-md dark:shadow-none transition duration-300">
+                <legend class="text-sm font-bold uppercase tracking-wider text-purple-600 dark:text-purple-400 px-4 py-1.5 bg-purple-50 dark:bg-purple-900/40 border border-purple-200 dark:border-purple-800 rounded-lg shadow-sm">Group 2: Maternity & Marital History</legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mt-4">
+                    <div class="group">
+                        <label for="abortion" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors">Abortion/Miscarriage</label>
+                        <select id="abortion" name="abortion" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="infertility" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors">Infertility</label>
+                        <select id="infertility" name="infertility" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">No</option>
+                            <option value="4">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="breastfeeding" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors">Breastfeeding</label>
+                        <select id="breastfeeding" name="breastfeeding" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select duration</option>
+                            <option value="1">> 12 months</option>
+                            <option value="2">< 12 months</option>
+                            <option value="3">No</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="marital_status" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-purple-500 dark:group-hover:text-purple-300 transition-colors">Marital Status</label>
+                        <select id="marital_status" name="marital_status" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select status</option>
+                            <option value="1">Single</option>
+                            <option value="2">Married/Other</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <!-- Group 3: Physical Symptoms & Relationships -->
+            <fieldset class="border border-slate-200 dark:border-darkBorder rounded-2xl p-6 sm:p-8 bg-[#F8FAFC] dark:bg-darkCard shadow-sm hover:shadow-md dark:shadow-none transition duration-300">
+                <legend class="text-sm font-bold uppercase tracking-wider text-teal-600 dark:text-teal-400 px-4 py-1.5 bg-teal-50 dark:bg-teal-900/40 border border-teal-200 dark:border-teal-800 rounded-lg shadow-sm">Group 3: Physical Symptoms</legend>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-4">
+                    <div class="group">
+                        <label for="breast_change" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-teal-500 dark:group-hover:text-teal-300 transition-colors">Change in Breast Shape/Size</label>
+                        <select id="breast_change" name="breast_change" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="breast_pain" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-teal-500 dark:group-hover:text-teal-300 transition-colors">Breast Pain</label>
+                        <select id="breast_pain" name="breast_pain" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="nipple_pain" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-teal-500 dark:group-hover:text-teal-300 transition-colors">Nipple Pain</label>
+                        <select id="nipple_pain" name="nipple_pain" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="breast_lump" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-teal-500 dark:group-hover:text-teal-300 transition-colors">Lump in Breast Area</label>
+                        <select id="breast_lump" name="breast_lump" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">No</option>
+                            <option value="3">Yes</option>
+                        </select>
+                    </div>
+
+                    <div class="group">
+                        <label for="cohabitation" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-teal-500 dark:group-hover:text-teal-300 transition-colors">Current Cohabitation</label>
+                        <select id="cohabitation" name="cohabitation" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-teal-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                            <option value="" disabled selected>Select option</option>
+                            <option value="1">Yes</option>
+                            <option value="3">No</option>
+                        </select>
+                    </div>
+                </div>
+            </fieldset>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Group 4: Lifestyle & Diet -->
+                <fieldset class="border border-slate-200 dark:border-darkBorder rounded-2xl p-6 sm:p-8 bg-[#F8FAFC] dark:bg-darkCard shadow-sm hover:shadow-md dark:shadow-none transition duration-300">
+                    <legend class="text-sm font-bold uppercase tracking-wider text-orange-600 dark:text-orange-400 px-4 py-1.5 bg-orange-50 dark:bg-orange-900/40 border border-orange-200 dark:border-orange-800 rounded-lg shadow-sm">Group 4: Lifestyle</legend>
+                    <div class="grid grid-cols-1 gap-6 mt-4">
+                        <div class="group">
+                            <label for="fatty_foods" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-orange-500 dark:group-hover:text-orange-300 transition-colors">Fatty Foods Habits</label>
+                            <select id="fatty_foods" name="fatty_foods" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                                <option value="" disabled selected>Select option</option>
+                                <option value="1">No</option>
+                                <option value="2">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="group">
+                            <label for="exercise" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-orange-500 dark:group-hover:text-orange-300 transition-colors">Regular Exercise</label>
+                            <select id="exercise" name="exercise" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-orange-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                                <option value="" disabled selected>Select option</option>
+                                <option value="1">Yes</option>
+                                <option value="2">No</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+
+                <!-- Group 5: Menopause & Habits -->
+                <fieldset class="border border-slate-200 dark:border-darkBorder rounded-2xl p-6 sm:p-8 bg-[#F8FAFC] dark:bg-darkCard shadow-sm hover:shadow-md dark:shadow-none transition duration-300">
+                    <legend class="text-sm font-bold uppercase tracking-wider text-pink-600 dark:text-pink-400 px-4 py-1.5 bg-pink-50 dark:bg-pink-900/40 border border-pink-200 dark:border-pink-800 rounded-lg shadow-sm">Group 5: Habits</legend>
+                    <div class="grid grid-cols-1 gap-6 mt-4">
+                        <div class="group">
+                            <label for="late_menopause" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-pink-500 dark:group-hover:text-pink-300 transition-colors">Late Menopause (> 53 years)</label>
+                            <select id="late_menopause" name="late_menopause" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                                <option value="" disabled selected>Select option</option>
+                                <option value="1">No</option>
+                                <option value="4">Yes</option>
+                            </select>
+                        </div>
+
+                        <div class="group">
+                            <label for="smoking" class="block text-xs font-semibold text-slate-500 dark:text-slate-400 mb-2 uppercase tracking-wider group-hover:text-pink-500 dark:group-hover:text-pink-300 transition-colors">Smoking Habits</label>
+                            <select id="smoking" name="smoking" class="w-full rounded-xl border border-slate-300 dark:border-darkBorder px-4 py-3 focus:outline-none focus:ring-2 focus:ring-pink-500 bg-white dark:bg-darkInput text-slate-900 dark:text-slate-200 transition-all text-sm font-medium" required>
+                                <option value="" disabled selected>Select option</option>
+                                <option value="1">No</option>
+                                <option value="2">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+
+            <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 dark:bg-brandBlue dark:hover:bg-blue-600 text-white font-bold text-lg py-4 px-6 rounded-2xl transition duration-300 ease-in-out transform hover:-translate-y-1 hover:shadow-xl shadow-lg focus:outline-none focus:ring-4 focus:ring-indigo-300 dark:focus:ring-blue-800">
+                Calculate Risk Score
+            </button>
+        </form>
+
+        <!-- Result Container -->
+        <div id="result-container-sshihabb007" class="hidden mt-12 p-8 sm:p-12 rounded-3xl shadow-2xl border transition-all duration-700 transform translate-y-8 opacity-0">
+            <h2 class="text-3xl font-extrabold mb-6 text-center tracking-tight" id="result-title-shihab">Assessment Result</h2>
+            <!-- 
+            <div class="flex flex-col items-center justify-center mb-8">
+                <span class="text-sm uppercase tracking-widest font-bold text-slate-500 dark:text-slate-400 mb-2">Total Score</span>
+                <span id="score-display" class="font-black text-6xl drop-shadow-md"></span>
+            </div>
+            -->
+            
+            <div id="risk-level-alert-mehedi" class="p-6 rounded-2xl text-center font-extrabold text-2xl shadow-inner border-2 tracking-wider uppercase">
+            </div>
+            
+            <div class="mt-10 border-t border-slate-200 dark:border-darkBorder pt-8">
+                <p class="text-sm text-center text-slate-500 dark:text-slate-400 leading-relaxed max-w-2xl mx-auto">
+                    <strong>Disclaimer:</strong> This tool is designed for informational and educational purposes only, based on a specific predictive clinical model. It is <em>not</em> a substitute for professional medical advice, diagnosis, or treatment. Always seek the advice of your physician or other qualified health provider with any questions you may have regarding a medical condition.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Security Measures
+        document.addEventListener('contextmenu', e => e.preventDefault()); // Disable right-click
+        document.addEventListener('copy', e => e.preventDefault()); // Disable copy
+        document.addEventListener('cut', e => e.preventDefault()); // Disable cut
+        document.addEventListener('paste', e => e.preventDefault()); // Disable paste
+        
+        document.addEventListener('keydown', function(e) {
+            // Disable F12
+            if(e.key === 'F12' || e.keyCode === 123) {
+                e.preventDefault();
+                return false;
+            }
+            // Disable Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+Shift+C
+            if(e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C' || e.key === 'i' || e.key === 'j' || e.key === 'c')) {
+                e.preventDefault();
+                return false;
+            }
+            // Disable Ctrl+U (View Source)
+            if(e.ctrlKey && (e.key === 'u' || e.key === 'U')) {
+                e.preventDefault();
+                return false;
+            }
+        });
+
+        // Theme toggling logic
+        const themeToggleBtn = document.getElementById('theme-toggle-shihab');
+        const darkIcon = document.getElementById('theme-toggle-dark-icon');
+        const lightIcon = document.getElementById('theme-toggle-light-icon');
+
+        // Check initial theme preference
+        if (localStorage.getItem('color-theme') === 'dark' || (!('color-theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            document.documentElement.classList.add('dark');
+            lightIcon.classList.remove('hidden');
+            darkIcon.classList.add('hidden');
+        } else {
+            document.documentElement.classList.remove('dark');
+            darkIcon.classList.remove('hidden');
+            lightIcon.classList.add('hidden');
+        }
+
+        themeToggleBtn.addEventListener('click', function() {
+            // Toggle icons
+            darkIcon.classList.toggle('hidden');
+            lightIcon.classList.toggle('hidden');
+
+            // Toggle theme
+            if (document.documentElement.classList.contains('dark')) {
+                document.documentElement.classList.remove('dark');
+                localStorage.setItem('color-theme', 'light');
+            } else {
+                document.documentElement.classList.add('dark');
+                localStorage.setItem('color-theme', 'dark');
+            }
+        });
+
+        // Form submission logic
+        document.getElementById('risk-form-mehedi').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // Retrieve and parse values for Group 1
+            const g1 = parseInt(document.getElementById('age').value) +
+                       parseInt(document.getElementById('family_history').value) +
+                       parseInt(document.getElementById('previous_cancer').value) +
+                       parseInt(document.getElementById('early_menarche').value) +
+                       parseInt(document.getElementById('alcohol').value) +
+                       parseInt(document.getElementById('bmi').value) +
+                       parseInt(document.getElementById('hormone_therapy').value);
+
+            // Retrieve and parse values for Group 2
+            const g2 = parseInt(document.getElementById('abortion').value) +
+                       parseInt(document.getElementById('infertility').value) +
+                       parseInt(document.getElementById('breastfeeding').value) +
+                       parseInt(document.getElementById('marital_status').value);
+
+            // Retrieve and parse values for Group 3
+            const g3 = parseInt(document.getElementById('breast_change').value) +
+                       parseInt(document.getElementById('breast_pain').value) +
+                       parseInt(document.getElementById('nipple_pain').value) +
+                       parseInt(document.getElementById('cohabitation').value) +
+                       parseInt(document.getElementById('breast_lump').value);
+
+            // Retrieve and parse values for Group 4
+            const g4 = parseInt(document.getElementById('fatty_foods').value) +
+                       parseInt(document.getElementById('exercise').value);
+
+            // Retrieve and parse values for Group 5
+            const g5 = parseInt(document.getElementById('late_menopause').value) +
+                       parseInt(document.getElementById('smoking').value);
+
+            // Calculate Total Score
+            const totalScore = g1 + g2 + g3 + g4 + g5;
+
+            // DOM Elements
+            const resultContainer = document.getElementById('result-container-sshihabb007');
+            // const scoreDisplay = document.getElementById('score-display');
+            const riskLevelAlert = document.getElementById('risk-level-alert-mehedi');
+            const resultTitle = document.getElementById('result-title-shihab');
+
+            // Set Score
+            // scoreDisplay.textContent = totalScore;
+            
+            // Reset classes
+            riskLevelAlert.className = 'p-6 rounded-2xl text-center font-extrabold text-2xl shadow-inner border-2 tracking-wider uppercase transition-all duration-300';
+            resultContainer.className = 'mt-12 p-8 sm:p-12 rounded-3xl shadow-2xl border transition-all duration-700 transform translate-y-0 opacity-100 flex flex-col bg-[#F8FAFC] dark:bg-darkCard dark:border-darkBorder';
+            resultTitle.className = 'text-3xl font-extrabold mb-6 text-center tracking-tight';
+            // scoreDisplay.className = 'font-black text-6xl drop-shadow-md transition-colors duration-300';
+
+            // Apply logic and styling
+            if (totalScore <= 34) {
+                // Low Risk (Green)
+                riskLevelAlert.textContent = 'Low Risk Level';
+                riskLevelAlert.classList.add('bg-green-100', 'text-green-800', 'border-green-400', 'dark:bg-green-900/30', 'dark:text-green-400', 'dark:border-green-800');
+                resultTitle.classList.add('text-green-900', 'dark:text-green-400');
+                // scoreDisplay.classList.add('text-green-600', 'dark:text-green-500');
+            } else if (totalScore > 34 && totalScore <= 45) {
+                // Intermediate Risk (Yellow)
+                riskLevelAlert.textContent = 'Intermediate Risk Level';
+                riskLevelAlert.classList.add('bg-yellow-100', 'text-yellow-800', 'border-yellow-400', 'dark:bg-yellow-900/30', 'dark:text-yellow-400', 'dark:border-yellow-800');
+                resultTitle.classList.add('text-yellow-900', 'dark:text-yellow-400');
+                // scoreDisplay.classList.add('text-yellow-600', 'dark:text-yellow-500');
+            } else {
+                // High Risk (Red)
+                riskLevelAlert.textContent = 'High Risk Level';
+                riskLevelAlert.classList.add('bg-red-100', 'text-red-800', 'border-red-400', 'dark:bg-red-900/30', 'dark:text-red-400', 'dark:border-red-800');
+                resultTitle.classList.add('text-red-900', 'dark:text-red-400');
+                // scoreDisplay.classList.add('text-red-600', 'dark:text-red-500');
+            }
+
+            // Smooth scroll to the result container after a tiny delay for rendering
+            setTimeout(() => {
+                resultContainer.scrollIntoView({ behavior: 'smooth', block: 'end' });
+            }, 100);
+        });
+    </script>
+</body>
+</html>
